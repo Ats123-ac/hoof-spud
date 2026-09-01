@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tool_data.gd" id="1_tool"]
+[ext_resource type="Texture2D" path="res://Assets/farming sprites/Objects/Basic Plants.png" id="2_plants"]
+[ext_resource type="Resource" path="res://resources/crops/eggplant.tres" id="3_crop"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bag"]
+atlas = ExtResource("2_plants")
+region = Rect2(0, 16, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_tool")
+id = &"sow_eggplant"
+display_name = "Eggplant Seeds"
+icon = SubResource("AtlasTexture_bag")
+kind = 3
+animation = &"till"
+damage = 0
+crop = ExtResource("3_crop")

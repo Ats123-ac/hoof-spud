@@ -1,0 +1,78 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/entities/harvestable.gd" id="1_harvestable"]
+[ext_resource type="Texture2D" uid="uid://bq5kmljyoxp6x" path="res://Assets/farming sprites/Objects/Basic Grass Biom things 1.png" id="2_biome"]
+[ext_resource type="Shader" path="res://shaders/shake.gdshader" id="3_shake"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="5_health"]
+[ext_resource type="Script" path="res://scripts/components/shake_component.gd" id="6_shakecomp"]
+[ext_resource type="Script" path="res://scripts/components/hit_flash_component.gd" id="7_flash"]
+[ext_resource type="Script" path="res://scripts/components/drop_component.gd" id="8_drop"]
+[ext_resource type="Resource" path="res://resources/drops/rock_drops.tres" id="9_drops"]
+[ext_resource type="PackedScene" path="res://scenes/items/collectable.tscn" id="10_collectable"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rock"]
+atlas = ExtResource("2_biome")
+region = Rect2(128, 16, 16, 16)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rock"]
+resource_local_to_scene = true
+shader = ExtResource("3_shake")
+shader_parameter/shake_strength = 0.0
+shader_parameter/speed = 34.0
+shader_parameter/falloff = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(14, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(20, 14)
+
+[node name="Rock" type="Node2D"]
+script = ExtResource("1_harvestable")
+hit_shake = 1.2
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_rock")
+texture = SubResource("AtlasTexture_rock")
+offset = Vector2(0, -6)
+
+[node name="Body" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape2D" parent="Body"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_hurtbox")
+accepted_tools = Array[StringName]([&"mine"])
+health = NodePath("../Health")
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_hurt")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("5_health")
+max_health = 2
+
+[node name="Shake" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("6_shakecomp")
+target = NodePath("../Sprite")
+strength = 1.2
+decay = 9.0
+
+[node name="Flash" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("7_flash")
+target = NodePath("../Sprite")
+
+[node name="Drop" type="Node" parent="."]
+script = ExtResource("8_drop")
+table = ExtResource("9_drops")
+collectable_scene = ExtResource("10_collectable")
+spread = 5.0

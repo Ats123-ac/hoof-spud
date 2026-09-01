@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DropTable" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/drop_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://scripts/resources/drop_entry.gd" id="2_entry"]
+[ext_resource type="Resource" path="res://resources/items/stone.tres" id="3_stone"]
+
+[sub_resource type="Resource" id="Resource_stone"]
+script = ExtResource("2_entry")
+item = ExtResource("3_stone")
+min_amount = 1
+max_amount = 3
+chance = 1.0
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[DropEntry]([SubResource("Resource_stone")])

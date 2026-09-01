@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/crop_data.gd" id="1_crop"]
+[ext_resource type="Texture2D" path="res://Assets/farming sprites/Objects/Basic Plants.png" id="2_plants"]
+[ext_resource type="Resource" path="res://resources/items/wheat.tres" id="3_produce"]
+[ext_resource type="Resource" path="res://resources/items/wheat_seeds.tres" id="4_seed"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stage0"]
+atlas = ExtResource("2_plants")
+region = Rect2(16, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stage1"]
+atlas = ExtResource("2_plants")
+region = Rect2(32, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stage2"]
+atlas = ExtResource("2_plants")
+region = Rect2(48, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stage3"]
+atlas = ExtResource("2_plants")
+region = Rect2(64, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_crop")
+id = &"wheat"
+display_name = "Wheat"
+stages = Array[Texture2D]([SubResource("AtlasTexture_stage0"), SubResource("AtlasTexture_stage1"), SubResource("AtlasTexture_stage2"), SubResource("AtlasTexture_stage3")])
+days_per_stage = 1
+produce = ExtResource("3_produce")
+produce_min = 2
+produce_max = 3
+seed_item = ExtResource("4_seed")
+seed_return_chance = 0.5
+regrow_stage = -1

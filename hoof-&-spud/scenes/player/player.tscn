@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_machine"]
+[ext_resource type="Script" path="res://scripts/player/states/player_idle.gd" id="3_idle"]
+[ext_resource type="Script" path="res://scripts/player/states/player_walk.gd" id="4_walk"]
+[ext_resource type="Script" path="res://scripts/player/states/player_tool.gd" id="5_tool"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(12, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(16, 16)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+y_sort_enabled = true
+motion_mode = 1
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -8)
+
+[node name="Body" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="ToolHitbox" type="Area2D" parent="."]
+position = Vector2(0, 14)
+collision_layer = 16
+collision_mask = 8
+monitorable = false
+
+[node name="Shape" type="CollisionShape2D" parent="ToolHitbox"]
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_machine")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("3_idle")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("4_walk")
+
+[node name="Chop" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"chop"
+
+[node name="Mine" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"mine"
+
+[node name="Till" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"till"
+
+[node name="Water" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"water"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
