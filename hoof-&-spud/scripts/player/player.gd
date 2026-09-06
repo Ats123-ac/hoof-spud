@@ -76,11 +76,11 @@ var facing: Vector2 = Vector2.DOWN
 
 var tool_index: int = 0
 
+var _step_timer: float = 0.0
+
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var tool_hitbox: Area2D = $ToolHitbox
 @onready var state_machine: StateMachine = $StateMachine
-
-var _step_timer: float = 0.0
 
 
 func _ready() -> void:

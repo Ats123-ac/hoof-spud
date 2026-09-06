@@ -19,13 +19,13 @@ const ICON_SIZE := Vector2(20, 20)
 const EMPTY_DIM := Color(0.62, 0.58, 0.52, 0.7)
 const FILLED := Color(1.0, 1.0, 1.0, 1.0)
 
-@onready var chest_grid: GridContainer = %ChestGrid
-@onready var bag_grid: GridContainer = %SatchelGrid
-
 var chest: Chest
 var _chest_slots: Array[Dictionary] = []
 var _bag_slots: Array[Dictionary] = []
 var _closed := false
+
+@onready var chest_grid: GridContainer = %ChestGrid
+@onready var bag_grid: GridContainer = %SatchelGrid
 
 
 func _ready() -> void:

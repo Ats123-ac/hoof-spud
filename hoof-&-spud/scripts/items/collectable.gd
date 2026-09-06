@@ -32,11 +32,11 @@ signal collected(item: ItemData, amount: int)
 ## Height of the arc played on spawn, in pixels.
 @export_range(0.0, 24.0) var pop_height: float = 7.0
 
-@onready var sprite: Sprite2D = $Sprite
-
 var _age: float = 0.0
 var _target: Node2D = null
 var _absorbed: bool = false
+
+@onready var sprite: Sprite2D = $Sprite
 
 
 func _ready() -> void:

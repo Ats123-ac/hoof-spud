@@ -13,12 +13,12 @@ const OVERLAY_LAYER := 100
 
 const FADE_SECONDS := 0.45
 
+## Handed from the outgoing scene to the incoming one, for door spawns or cutscenes.
+var payload: Dictionary = {}
+
 var _overlay: ColorRect
 var _busy: bool = false
 var _pending: String = ""
-
-## Handed from the outgoing scene to the incoming one, for door spawns or cutscenes.
-var payload: Dictionary = {}
 
 
 func _ready() -> void:

@@ -220,7 +220,9 @@ func collect_save() -> Dictionary:
 	}
 
 
-func apply_save(tilled: Array[Vector2i], watered: Array[Vector2i], crops: Array[Dictionary]) -> void:
+func apply_save(
+	tilled: Array[Vector2i], watered: Array[Vector2i], crops: Array[Dictionary]
+) -> void:
 	tilled_layer.clear()
 	moist_layer.clear()
 	for cell in _crops.keys():

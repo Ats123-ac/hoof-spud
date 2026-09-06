@@ -14,15 +14,15 @@ signal finished
 ## Characters revealed per second.
 const TYPE_SPEED := 45.0
 
-@onready var name_label: Label = %NameLabel
-@onready var text_label: Label = %TextLabel
-@onready var hint_label: Label = %HintLabel
-
 var _lines: Array[String] = []
 var _line_index := -1
 var _revealed := 0.0
 var _full := ""
 var _closed := false
+
+@onready var name_label: Label = %NameLabel
+@onready var text_label: Label = %TextLabel
+@onready var hint_label: Label = %HintLabel
 
 
 func _ready() -> void:
