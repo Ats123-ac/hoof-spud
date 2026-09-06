@@ -15,4 +15,4 @@ display_name = "Hoe"
 icon = SubResource("AtlasTexture_hoe")
 kind = 1
 animation = &"till"
-damage = 1
+damage = 0

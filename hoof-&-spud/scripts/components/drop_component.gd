@@ -7,6 +7,9 @@ extends Node
 
 signal dropped(item: ItemData, amount: int)
 
+## Ceiling so a mis-configured table cannot spawn hundreds of nodes.
+const MAX_NODES_PER_DROP := 12
+
 @export var table: DropTable
 
 ## Instantiated once per unit dropped; must expose `item` and `amount`.
@@ -17,9 +20,6 @@ signal dropped(item: ItemData, amount: int)
 
 ## Parent for the pickups; defaults to the owner's parent.
 @export var container: Node
-
-## Ceiling so a mis-configured table cannot spawn hundreds of nodes.
-const MAX_NODES_PER_DROP := 12
 
 
 ## Rolls [member table] and spawns the results around [param origin], in global space.

@@ -38,4 +38,3 @@ enum Kind {
 
 ## Crop sown when [member kind] is [constant Kind.SEED].
 @export var crop: CropData
-

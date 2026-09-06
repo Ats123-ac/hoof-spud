@@ -28,6 +28,8 @@ const POND_RADIUS := Vector2(7.0, 4.0)
 ## Pre-hoed plot in tiles, so a new save can sow immediately.
 const STARTER_PLOT := Rect2i(-6, 2, 5, 3)
 
+var _passing_out := false
+
 @onready var water: TileMapLayer = $Water
 @onready var ground: TileMapLayer = $Ground
 @onready var farm: FarmSystem = $Farm
@@ -35,8 +37,6 @@ const STARTER_PLOT := Rect2i(-6, 2, 5, 3)
 @onready var entities: Node2D = $Entities
 @onready var player: Player = $Entities/Player
 @onready var hud: Hud = $HUD
-
-var _passing_out := false
 
 
 func _ready() -> void:
@@ -137,7 +137,7 @@ func _rect_points(rect: Rect2) -> PackedVector2Array:
 #region tools into farming
 
 
-func _on_tool_swung(tool: StringName, target: Vector2) -> void:
+func _on_tool_swung(_tool: StringName, target: Vector2) -> void:
 	var data := player.current_tool_data()
 	if data == null:
 		return

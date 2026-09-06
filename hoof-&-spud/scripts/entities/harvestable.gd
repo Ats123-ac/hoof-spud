@@ -20,18 +20,18 @@ signal harvested
 ## Sway applied per hit, in pixels.
 @export_range(0.0, 8.0) var hit_shake: float = 2.0
 
+var _full_texture: Texture2D
+var _depleted: bool = false
+
+## Tool behind the most recent accepted hit; tool ids double as sound names.
+var _last_tool: StringName = &""
+
 @onready var sprite: Sprite2D = $Sprite
 @onready var hurtbox: HurtboxComponent = $Hurtbox
 @onready var health: HealthComponent = $Health
 @onready var shake: ShakeComponent = $Shake
 @onready var flash: HitFlashComponent = $Flash
 @onready var drops: DropComponent = $Drop
-
-var _full_texture: Texture2D
-var _depleted: bool = false
-
-## Tool behind the most recent accepted hit; tool ids double as sound names.
-var _last_tool: StringName = &""
 
 
 func _ready() -> void:

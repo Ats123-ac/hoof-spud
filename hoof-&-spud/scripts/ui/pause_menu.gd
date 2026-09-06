@@ -9,14 +9,14 @@ extends Control
 
 const MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 
+var _saved_flash := 0.0
+
 @onready var continue_button: Button = %ContinueButton
 @onready var save_button: Button = %SaveButton
 @onready var saved_label: Label = %SavedLabel
 @onready var quit_button: Button = %QuitButton
 @onready var master_slider: HSlider = %MasterSlider
 @onready var sfx_slider: HSlider = %SfxSlider
-
-var _saved_flash := 0.0
 
 
 func _ready() -> void:

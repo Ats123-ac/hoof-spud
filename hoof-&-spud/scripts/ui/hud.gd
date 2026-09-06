@@ -13,6 +13,10 @@ extends CanvasLayer
 ## crosses an area edge.
 const PROMPT_INTERVAL := 0.1
 
+var _player: Player
+var _prompt_timer := 0.0
+var _toast_timer := 0.0
+
 @onready var day_label: Label = %DayLabel
 @onready var clock_label: Label = %ClockLabel
 @onready var prompt_label: Label = %PromptLabel
@@ -20,10 +24,6 @@ const PROMPT_INTERVAL := 0.1
 @onready var inventory_panel: Control = %InventoryPanel
 @onready var pause_menu: Control = %PauseMenu
 @onready var toast_label: Label = %ToastLabel
-
-var _player: Player
-var _prompt_timer := 0.0
-var _toast_timer := 0.0
 
 
 func _ready() -> void:
