@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/npcs/cow.gd" id="1_cow"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_machine"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_idle.gd" id="3_idle"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_wander.gd" id="4_wander"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_graze.gd" id="5_graze"]
+[ext_resource type="Script" path="res://scripts/components/interactable_component.gd" id="6_interact"]
+[ext_resource type="Resource" path="res://resources/items/milk.tres" id="7_milk"]
+[ext_resource type="Resource" path="res://resources/items/wheat.tres" id="8_wheat"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(18, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 16.0
+
+[node name="Cow" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_cow")
+wander_speed = 12.0
+wander_radius = 56.0
+idle_sound = &"moo"
+sound_chance = 0.25
+product = ExtResource("7_milk")
+product_prompt = "Collect Milk"
+feed_item = ExtResource("8_wheat")
+feed_prompt = "Feed Wheat"
+produces_unfed = false
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+offset = Vector2(0, -12)
+
+[node name="Body" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Interact" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 2
+monitorable = false
+script = ExtResource("6_interact")
+prompt_text = "Pet"
+
+[node name="Shape" type="CollisionShape2D" parent="Interact"]
+shape = SubResource("CircleShape2D_interact")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_machine")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("3_idle")
+animation = &"idle"
+
+[node name="Wander" type="Node" parent="StateMachine"]
+script = ExtResource("4_wander")
+animation = &"walk"
+arrive_state = &"graze"
+
+[node name="Graze" type="Node" parent="StateMachine"]
+script = ExtResource("5_graze")
+animation = &"idle"

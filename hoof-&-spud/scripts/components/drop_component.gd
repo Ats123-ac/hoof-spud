@@ -1,7 +1,7 @@
 ## Spawns collectable pickups from a [DropTable] when its owner breaks.
 ##
-## Pickups are parented outside the owner so they survive it being freed — a
-## chopped tree disappears, its logs do not.
+## Pickups are parented outside the owner so they outlive it being freed.
+
 class_name DropComponent
 extends Node
 
@@ -9,20 +9,20 @@ signal dropped(item: ItemData, amount: int)
 
 @export var table: DropTable
 
-## Scene instantiated per pickup. Must expose `item` and `amount`.
+## Instantiated once per unit dropped; must expose `item` and `amount`.
 @export var collectable_scene: PackedScene
 
-## Radius of the random scatter applied to each pickup, in pixels.
+## Random scatter radius per pickup, in pixels.
 @export_range(0.0, 32.0) var spread: float = 5.0
 
-## Node the pickups are parented to. Defaults to the owner's parent.
+## Parent for the pickups; defaults to the owner's parent.
 @export var container: Node
 
-## Safety valve so a mis-configured table cannot spawn hundreds of nodes.
+## Ceiling so a mis-configured table cannot spawn hundreds of nodes.
 const MAX_NODES_PER_DROP := 12
 
 
-## Roll [member table] and spawn the results around [param origin] (global).
+## Rolls [member table] and spawns the results around [param origin], in global space.
 func drop(origin: Vector2) -> void:
 	if table == null or collectable_scene == null:
 		return
@@ -38,7 +38,6 @@ func drop(origin: Vector2) -> void:
 		var amount: int = result["amount"]
 		dropped.emit(item, amount)
 
-		# One node per unit reads better than a single stack of five.
 		for _i in mini(amount, budget):
 			_spawn(parent, item, origin)
 		budget -= mini(amount, budget)

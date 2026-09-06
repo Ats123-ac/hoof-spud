@@ -1,9 +1,10 @@
-## Static description of one crop: what it looks like at each growth stage and
-## what it yields (Parts 17-18).
+## Static description of one crop: what it looks like at each growth stage and what
+## it yields.
 ##
-## Growth is counted in *watered days*, not real time — a crop only advances when
-## it was watered before the day rolled over, which is what ties the farming loop
-## to [GameClock].
+## Growth is counted in watered days rather than real time - a crop only advances if
+## it was watered before the day rolled over, which is what ties farming to
+## [GameClock].
+
 class_name CropData
 extends Resource
 
@@ -27,22 +28,15 @@ extends Resource
 @export var seed_item: ItemData
 @export_range(0.0, 1.0) var seed_return_chance: float = 0.35
 
-## Stage the plant drops back to after harvest, for crops that fruit more than
-## once. -1 clears the tile instead.
+## Stage the plant drops back to after harvest; -1 clears the tile instead.
 @export_range(-1, 8) var regrow_stage: int = -1
 
 
-## Index of the ripe stage.
 func ripe_stage() -> int:
 	return maxi(stages.size() - 1, 0)
 
 
-## Watered days from freshly sown to ripe.
-func days_to_ripe() -> int:
-	return ripe_stage() * days_per_stage
-
-
-## Texture for [param stage], clamped so a mis-typed save can never crash.
+## Clamped, so a mis-typed save can never crash the draw call.
 func texture_for(stage: int) -> Texture2D:
 	if stages.is_empty():
 		return null

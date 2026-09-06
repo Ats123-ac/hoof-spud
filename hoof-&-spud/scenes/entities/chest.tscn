@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/entities/chest.gd" id="1_chest"]
+[ext_resource type="Script" path="res://scripts/components/interactable_component.gd" id="2_interact"]
+[ext_resource type="Texture2D" path="res://Assets/farming sprites/Objects/Chest.png" id="3_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_closed"]
+atlas = ExtResource("3_sheet")
+region = Rect2(16, 16, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_open"]
+atlas = ExtResource("3_sheet")
+region = Rect2(160, 8, 16, 24)
+filter_clip = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(14, 10)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 12.0
+
+[node name="Chest" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_chest")
+open_texture = SubResource("AtlasTexture_open")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_closed")
+offset = Vector2(0, -8)
+
+[node name="Body" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape2D" parent="Body"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Interact" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 2
+monitorable = false
+script = ExtResource("2_interact")
+prompt_text = "Open Chest"
+
+[node name="Shape" type="CollisionShape2D" parent="Interact"]
+shape = SubResource("CircleShape2D_interact")

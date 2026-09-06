@@ -1,7 +1,8 @@
 ## Overbrightens a sprite for a few frames on impact.
 ##
-## Uses [member CanvasItem.modulate] above 1.0, which brightens in Godot's 2D
-## renderer, so it needs no shader and composes with the shake shader.
+## Drives [member CanvasItem.modulate] above 1.0, which brightens in Godot's 2D
+## renderer, so it needs no shader and composes with the shake material.
+
 class_name HitFlashComponent
 extends Node
 
@@ -9,7 +10,7 @@ extends Node
 
 @export_range(0.02, 1.0) var duration: float = 0.12
 
-## Multiplier applied on impact. 1.0 is no flash.
+## Multiplier applied on impact; 1.0 is no flash.
 @export_range(1.0, 6.0) var brightness: float = 2.5
 
 var _tween: Tween

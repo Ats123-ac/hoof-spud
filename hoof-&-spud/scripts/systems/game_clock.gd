@@ -1,34 +1,27 @@
-## Autoload driving the in-game clock and calendar (Part 16).
+## Autoload driving the in-game clock and calendar.
 ##
-## Everything that happens "overnight" hangs off [signal day_started]: crops grow,
-## animals lay, watered soil dries out. Nothing else needs to know how long a day
-## takes in real seconds, which is why that is the only tunable here.
-##
-## Time is held in minutes-since-midnight as a float so the tint can move
-## smoothly, but it is reported as whole minutes so listeners never see jitter.
+## Time is held as minutes-since-midnight in a float so the tint can interpolate,
+## and broadcast as whole minutes so listeners never see jitter.
+
 extends Node
 
-## Emitted whenever the whole-minute reading changes.
 signal time_changed(minutes: int)
 
-## Emitted on the hour, with the new hour in 0-23.
 signal hour_changed(hour: int)
 
-## Emitted when a new day begins, either by the clock rolling over or by sleeping.
+## Everything that happens overnight hangs off this: crops grow, animals lay,
+## watered soil dries out.
 signal day_started(day: int)
 
-## Emitted when the light changes band. Useful for lamps and NPC schedules.
 signal phase_changed(phase: Phase)
 
 enum Phase { DAWN, DAY, DUSK, NIGHT }
 
 const MINUTES_PER_DAY := 24 * 60
 
-## Hour the player wakes up on, and the hour a fresh save starts at.
 const WAKE_HOUR := 6
 
-## Ambient tint keyed by hour. Interpolated, so dusk slides in rather than
-## snapping. Kept above 1.0 nowhere — this multiplies the whole canvas.
+## Hour to tint index, interpolated between keys so dusk slides in.
 const TINT_KEYS: Array[Vector2] = [
 	Vector2(0.0, 0.0),
 	Vector2(4.5, 0.0),
@@ -47,16 +40,15 @@ const TINT_COLOURS: Array[Color] = [
 	Color(0.95, 0.71, 0.55),  ## dusk
 ]
 
-## Real seconds one whole in-game day takes. 12 minutes gives a day long enough
-## to get chores done and short enough that watering pays off in one session.
+## Real seconds one in-game day takes.
 var day_length: float = 720.0
 
 var day: int = 1
 
-## Minutes since midnight, 0 to 1440.
+## Minutes since midnight, 0.0 to 1439.0.
 var minutes: float = float(WAKE_HOUR * 60)
 
-## Cleared while a menu is open or the day-transition fade is playing.
+## Cleared while a menu or a transition owns the clock.
 var running: bool = true
 
 var _last_minute: int = -1
@@ -76,8 +68,6 @@ func _process(delta: float) -> void:
 	advance(delta / day_length * MINUTES_PER_DAY)
 
 
-## Push the clock forward by [param amount] in-game minutes, rolling the day over
-## as many times as needed.
 func advance(amount: float) -> void:
 	if amount <= 0.0:
 		return
@@ -91,7 +81,6 @@ func advance(amount: float) -> void:
 	_emit_changes()
 
 
-## Skip to [constant WAKE_HOUR] tomorrow. Used by the bed and by passing out.
 func sleep() -> void:
 	day += 1
 	minutes = float(WAKE_HOUR * 60)
@@ -99,11 +88,20 @@ func sleep() -> void:
 	_emit_changes()
 
 
-## Start a brand new save at day 1, morning.
+## Puts the clock back to a saved date and time and re-broadcasts it.
+func restore(saved_day: int, saved_minutes: float) -> void:
+	day = maxi(saved_day, 1)
+	minutes = clampf(saved_minutes, 0.0, float(MINUTES_PER_DAY - 1))
+	# Force the re-broadcast: a save can hold the very minute already on screen.
+	_last_minute = -1
+	_emit_changes()
+
+
 func reset() -> void:
 	day = 1
 	minutes = float(WAKE_HOUR * 60)
 	running = true
+	_last_minute = -1
 	_emit_changes()
 
 
@@ -115,7 +113,6 @@ func minute_of_hour() -> int:
 	return int(minutes) % 60
 
 
-## "6:05 am" — the HUD reads better with a 12-hour clock than with 06:05.
 func clock_text() -> String:
 	var raw := hour()
 	var suffix := "am" if raw < 12 else "pm"
@@ -136,12 +133,7 @@ func phase() -> Phase:
 	return Phase.DUSK
 
 
-## How far through the day we are, 0 at midnight and 1 at the next midnight.
-func day_progress() -> float:
-	return minutes / float(MINUTES_PER_DAY)
-
-
-## Colour to hand a [CanvasModulate] so the world dims at night.
+## Colour for a [CanvasModulate] at the current hour.
 func tint() -> Color:
 	var position := minutes / 60.0
 

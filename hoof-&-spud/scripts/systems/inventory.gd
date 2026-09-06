@@ -1,8 +1,8 @@
-## Autoload holding what the player is carrying.
+## Autoload holding what the player carries, as counts keyed by [member ItemData.id].
 ##
-## Stores counts keyed by [member ItemData.id] so it stays trivially
-## serialisable for Part 19's save system. The inventory UI (Part 15) should
-## render from [signal changed] rather than polling.
+## UI renders from [signal changed] rather than polling, and [method snapshot] is
+## what the save file stores.
+
 extends Node
 
 signal changed(id: StringName, total: int)
@@ -21,7 +21,7 @@ func add(id: StringName, amount: int = 1) -> void:
 	changed.emit(id, total)
 
 
-## Remove up to [param amount]. Returns how many were actually removed.
+## Removes up to [param amount]; returns how many were actually removed.
 func remove(id: StringName, amount: int = 1) -> int:
 	if amount <= 0:
 		return 0
@@ -49,7 +49,7 @@ func has(id: StringName, amount: int = 1) -> bool:
 	return count(id) >= amount
 
 
-## Every held id and its count. Safe to mutate — it is a copy.
+## A copy, so callers may mutate it freely.
 func snapshot() -> Dictionary[StringName, int]:
 	return _counts.duplicate()
 

@@ -1,14 +1,15 @@
-## What an object yields when it breaks. Rolled by [DropComponent].
+## What an object yields when it breaks, rolled by [DropComponent].
 ##
-## Every entry is rolled independently, so a table can both guarantee wood and
-## occasionally add a sapling.
+## Every entry rolls independently, so a table can guarantee wood and occasionally
+## add a sapling.
+
 class_name DropTable
 extends Resource
 
 @export var entries: Array[DropEntry] = []
 
 
-## Roll every entry. Returns one `{item, amount}` dictionary per entry that hit.
+## One `{item, amount}` dictionary per entry that hit.
 func roll() -> Array[Dictionary]:
 	var results: Array[Dictionary] = []
 

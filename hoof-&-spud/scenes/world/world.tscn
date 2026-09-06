@@ -1,10 +1,20 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/world.gd" id="1_world"]
 [ext_resource type="TileSet" path="res://tilesets/farm_tileset.tres" id="2_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/entities/tree.tscn" id="4_tree"]
 [ext_resource type="PackedScene" path="res://scenes/entities/rock.tscn" id="5_rock"]
+[ext_resource type="Script" path="res://scripts/farming/farm_system.gd" id="6_farm"]
+[ext_resource type="PackedScene" path="res://scenes/entities/crop.tscn" id="7_crop"]
+[ext_resource type="PackedScene" path="res://scenes/items/collectable.tscn" id="8_collectable"]
+[ext_resource type="Script" path="res://scripts/world/day_tint.gd" id="9_tint"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="10_hud"]
+[ext_resource type="PackedScene" path="res://scenes/entities/chest.tscn" id="11_chest"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/chicken.tscn" id="12_chicken"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/cow.tscn" id="13_cow"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/villager.tscn" id="14_villager"]
+[ext_resource type="PackedScene" path="res://scenes/structures/farmhouse.tscn" id="15_house"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -22,6 +32,11 @@ tile_set = ExtResource("2_tileset")
 z_index = -2
 tile_set = ExtResource("2_tileset")
 
+[node name="Moist" type="TileMapLayer" parent="."]
+modulate = Color(0.55, 0.42, 0.34, 0.62)
+z_index = -2
+tile_set = ExtResource("2_tileset")
+
 [node name="Paths" type="TileMapLayer" parent="."]
 z_index = -1
 tile_set = ExtResource("2_tileset")
@@ -34,10 +49,34 @@ tile_set = ExtResource("2_tileset")
 z_index = 10
 tile_set = ExtResource("2_tileset")
 
+[node name="Navigation" type="NavigationRegion2D" parent="."]
+
+[node name="DayTint" type="CanvasModulate" parent="."]
+script = ExtResource("9_tint")
+
+[node name="Farm" type="Node" parent="." node_paths=PackedStringArray("ground_layer", "water_layer", "tilled_layer", "moist_layer", "crop_container")]
+script = ExtResource("6_farm")
+ground_layer = NodePath("../Ground")
+water_layer = NodePath("../Water")
+tilled_layer = NodePath("../Tilled")
+moist_layer = NodePath("../Moist")
+crop_container = NodePath("../Crops")
+crop_scene = ExtResource("7_crop")
+collectable_scene = ExtResource("8_collectable")
+
+[node name="Crops" type="Node2D" parent="."]
+y_sort_enabled = true
+
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="Player" parent="Entities" instance=ExtResource("3_player")]
+
+[node name="Farmhouse" parent="Entities" instance=ExtResource("15_house")]
+position = Vector2(-208, -160)
+
+[node name="Chest" parent="Entities" instance=ExtResource("11_chest")]
+position = Vector2(-176, -128)
 
 [node name="Tree" parent="Entities" instance=ExtResource("4_tree")]
 position = Vector2(-64, -48)
@@ -62,3 +101,17 @@ position = Vector2(80, 24)
 
 [node name="Rock3" parent="Entities" instance=ExtResource("5_rock")]
 position = Vector2(-80, -8)
+
+[node name="Hen" parent="Entities" instance=ExtResource("12_chicken")]
+position = Vector2(-160, -112)
+
+[node name="Hen2" parent="Entities" instance=ExtResource("12_chicken")]
+position = Vector2(-128, -96)
+
+[node name="Cow" parent="Entities" instance=ExtResource("13_cow")]
+position = Vector2(208, -144)
+
+[node name="Marsh" parent="Entities" instance=ExtResource("14_villager")]
+position = Vector2(-64, -64)
+
+[node name="HUD" parent="." instance=ExtResource("10_hud")]

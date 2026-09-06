@@ -1,8 +1,8 @@
-## Slices uniform grid sprite sheets into [SpriteFrames] animations.
+## Slices uniform-grid sprite sheets into [SpriteFrames] animations.
 ##
-## The Sprout Lands sheets are plain grids, so an animation is just "row N,
-## columns 0..K". Declaring clips this way keeps the whole mapping readable in
-## one place instead of scattered across dozens of [AtlasTexture] sub-resources.
+## Declaring a clip as a row plus a cell count keeps the whole sheet mapping in one
+## place instead of scattered across dozens of [AtlasTexture] sub-resources.
+
 class_name SpriteSheet
 extends RefCounted
 
@@ -16,7 +16,7 @@ static func row(y: int, count: int, start: int = 0) -> Array[Vector2i]:
 	return cells
 
 
-## Register [param cells] of [param sheet] as an animation named [param clip].
+## Registers [param cells] of [param sheet] as an animation named [param name].
 static func add_clip(
 	frames: SpriteFrames,
 	sheet: Texture2D,
