@@ -1,10 +1,10 @@
-## A pickup lying in the world: pops out on spawn, then homes in on the player
-## once it has settled.
+## A pickup lying in the world: pops out on spawn, then homes in on the player.
 ##
-## Proximity is checked by distance to the "player" group rather than with an
-## Area2D. Drops spawn on top of whatever was just struck — often overlapping
-## the player already — and a plain distance check after an arming delay avoids
-## the enter/exit ordering problems that come with monitoring areas.
+## Proximity is a distance check against the "player" group rather than an Area2D.
+## Drops spawn on top of whatever was just struck, often already overlapping the
+## player, and a distance check behind an arming delay sidesteps the enter/exit
+## ordering problems that come with monitoring areas.
+
 class_name Collectable
 extends Node2D
 
@@ -29,7 +29,7 @@ signal collected(item: ItemData, amount: int)
 
 @export_range(10.0, 600.0) var home_speed: float = 230.0
 
-## Height of the little arc played on spawn, in pixels.
+## Height of the arc played on spawn, in pixels.
 @export_range(0.0, 24.0) var pop_height: float = 7.0
 
 @onready var sprite: Sprite2D = $Sprite
@@ -76,6 +76,7 @@ func _absorb() -> void:
 	_absorbed = true
 	if item != null:
 		Inventory.add(item.id, amount)
+	Audio.play(&"pickup")
 	collected.emit(item, amount)
 	queue_free()
 
@@ -85,7 +86,7 @@ func _refresh_icon() -> void:
 		sprite.texture = item.icon
 
 
-## Small hop so a fresh drop reads as having been knocked loose.
+## A small hop so a fresh drop reads as knocked loose.
 func _play_pop() -> void:
 	if is_zero_approx(pop_height):
 		return

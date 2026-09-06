@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/entities/harvestable.gd" id="1_harvestable"]
 [ext_resource type="Texture2D" uid="uid://bq5kmljyoxp6x" path="res://Assets/farming sprites/Objects/Basic Grass Biom things 1.png" id="2_biome"]

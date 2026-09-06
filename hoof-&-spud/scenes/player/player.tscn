@@ -60,6 +60,14 @@ animation = &"till"
 script = ExtResource("5_tool")
 animation = &"water"
 
+[node name="SowWheat" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"till"
+
+[node name="SowEggplant" type="Node" parent="StateMachine"]
+script = ExtResource("5_tool")
+animation = &"till"
+
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true

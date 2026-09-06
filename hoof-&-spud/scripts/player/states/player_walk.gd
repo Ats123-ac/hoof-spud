@@ -1,5 +1,6 @@
-## Moving under player input. Re-plays the directional walk clip whenever the
-## facing changes so turning corners swaps animation immediately.
+## Moving under player input. Re-plays the directional walk clip whenever the facing
+## changes, so turning corners swaps animation immediately.
+
 extends State
 
 var _player: Player
@@ -19,6 +20,7 @@ func physics_update(delta: float) -> void:
 
 	_player.accelerate(direction, delta)
 	_player.move_and_slide()
+	_player.tick_footstep(delta)
 
 	var facing := _player.facing_name()
 	if facing != _last_facing:

@@ -1,23 +1,22 @@
 ## Area the player's tool hitbox can strike.
 ##
-## [method Player.swing_tool] calls [method take_hit] on every overlapping area
-## that defines it, so this is the single contract between the player and every
-## destructible thing in the world. Gating on [member accepted_tools] is what
-## makes an axe useless on a rock.
+## [method Player.swing_tool] calls [method take_hit] on every overlapping area that
+## defines it, so this is the one contract between the player and every destructible
+## thing. [member accepted_tools] is what makes an axe useless on a rock.
+
 class_name HurtboxComponent
 extends Area2D
 
 ## A hit that passed the tool check and was forwarded to health.
 signal hit_received(tool_name: StringName, damage: int)
 
-## A hit with the wrong tool. Useful for a "wrong tool" bounce or sound.
+## Wrong tool; drive a bounce or a deny sound from this.
 signal hit_rejected(tool_name: StringName)
 
-## Tools allowed to damage this. Leave empty to accept every tool.
+## Tools allowed to damage this; empty accepts every tool.
 @export var accepted_tools: Array[StringName] = []
 
-## Health to damage. Optional — listen to [signal hit_received] instead if the
-## owner wants to handle hits itself.
+## Optional: leave null and listen to [signal hit_received] to handle hits yourself.
 @export var health: HealthComponent
 
 

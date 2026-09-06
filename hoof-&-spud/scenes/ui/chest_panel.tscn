@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/chest_panel.gd" id="1_panel"]
+
+[node name="ChestPanel" type="CanvasLayer"]
+script = ExtResource("1_panel")
+
+[node name="Box" type="PanelContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -176.0
+offset_top = -84.0
+offset_right = 176.0
+offset_bottom = 84.0
+
+[node name="VBox" type="VBoxContainer" parent="Box"]
+alignment = 1
+
+[node name="Title" type="Label" parent="Box/VBox"]
+text = "Chest"
+horizontal_alignment = 1
+
+[node name="Row" type="HBoxContainer" parent="Box/VBox"]
+alignment = 1
+
+[node name="ChestSide" type="VBoxContainer" parent="Box/VBox/Row"]
+
+[node name="ChestTitle" type="Label" parent="Box/VBox/Row/ChestSide"]
+text = "Chest"
+horizontal_alignment = 1
+
+[node name="ChestGrid" type="GridContainer" parent="Box/VBox/Row/ChestSide"]
+unique_name_in_owner = true
+columns = 6
+
+[node name="Spacer" type="Control" parent="Box/VBox/Row"]
+custom_minimum_size = Vector2(16, 0)
+
+[node name="BagSide" type="VBoxContainer" parent="Box/VBox/Row"]
+
+[node name="BagTitle" type="Label" parent="Box/VBox/Row/BagSide"]
+text = "Satchel"
+horizontal_alignment = 1
+
+[node name="SatchelGrid" type="GridContainer" parent="Box/VBox/Row/BagSide"]
+unique_name_in_owner = true
+columns = 6
+
+[node name="Hint" type="Label" parent="Box/VBox"]
+text = "Click: move 1   Shift+Click: move stack   Esc: close"
+horizontal_alignment = 1

@@ -1,14 +1,14 @@
 ## Kicks a sprite's shake shader and decays it back to rest.
 ##
-## The target's material must be a [ShaderMaterial] exposing a float uniform
-## named by [member parameter] — see shaders/shake.gdshader. Mark that material
-## `resource_local_to_scene` so each tree wobbles independently.
+## The target's material must be a [ShaderMaterial] exposing the float uniform named
+## by [member parameter], marked `resource_local_to_scene` so each prop wobbles alone.
+
 class_name ShakeComponent
 extends Node
 
 @export var target: CanvasItem
 
-## Uniform to drive on the target's shader.
+## Shader uniform to drive.
 @export var parameter: StringName = &"shake_strength"
 
 ## Sway in pixels applied by a default-strength hit.
@@ -21,12 +21,11 @@ var _value: float = 0.0
 
 
 func _ready() -> void:
-	# Idle until something actually hits us.
 	set_process(false)
 	_apply()
 
 
-## Start (or restart) a wobble. Pass a negative amount to use [member strength].
+## Starts or restarts a wobble; a negative [param amount] falls back to [member strength].
 func shake(amount: float = -1.0) -> void:
 	if target == null:
 		return

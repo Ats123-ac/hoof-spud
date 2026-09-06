@@ -1,13 +1,14 @@
-## One swing of a tool. Shared by the Chop, Till and Water state nodes — they
-## differ only in the exported [member animation], which is why the state name
-## matches the animation prefix and the tool name in [member Player.tools].
+## One swing of a tool, shared by every tool state node: they differ only in the
+## exported [member animation], which is why the state name matches the animation
+## prefix and the tool id in [member Player.tools].
+
 extends State
 
-## Animation prefix on the player's [SpriteFrames], e.g. "chop" -> "chop_left".
+## Clip prefix on the player's [SpriteFrames]: `chop` -> `chop_left`.
 @export var animation: StringName = &"chop"
 
-## Frame index the swing connects on. The Sprout Lands action clips are two
-## frames, so the contact is the second one.
+## Frame the swing connects on; the action clips are two frames, so contact is
+## the second.
 @export var hit_frame: int = 1
 
 var _player: Player
@@ -30,7 +31,6 @@ func exit() -> void:
 
 
 func physics_update(_delta: float) -> void:
-	# Rooted for the duration of the swing.
 	_player.velocity = Vector2.ZERO
 	_player.move_and_slide()
 

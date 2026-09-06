@@ -1,21 +1,19 @@
-## Drives its [State] children, forwarding process and input callbacks to
-## whichever one is active.
+## Drives its [State] children, forwarding process, physics and input to the active one.
 ##
-## States are registered under their node name in snake_case, so a child called
-## "Walk" is reached with `&"walk"` and one called "ToolUse" with `&"tool_use"`.
+## States register under their node name in snake_case, so a child called `ToolUse`
+## is reached with `&"tool_use"`.
+
 class_name StateMachine
 extends Node
 
-## Emitted after every successful switch.
 signal state_changed(previous: StringName, current: StringName)
 
-## State to enter on startup. Falls back to the first [State] child.
+## State to enter on startup; falls back to the first [State] child.
 @export var initial_state: State
 
-## Node the states operate on. Defaults to this machine's parent.
+## Node the states operate on; defaults to this machine's parent.
 @export var agent: Node
 
-## Name of the active state, or an empty [StringName] before startup.
 var current_name: StringName = &""
 
 var _current: State
@@ -35,7 +33,7 @@ func _ready() -> void:
 		state.agent = agent
 		state.transitioned.connect(_on_state_transitioned)
 
-	# Wait for siblings so states can safely touch the agent's @onready vars.
+	# Wait for the owner so states can safely touch its @onready vars.
 	if not owner.is_node_ready():
 		await owner.ready
 
@@ -66,7 +64,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_current.handle_input(event)
 
 
-## Switch to [param next]. Re-entering the active state is a no-op.
+## Switches to [param next]; re-entering the active state is a no-op.
 func travel(next: StringName) -> void:
 	if next == current_name:
 		return
@@ -97,5 +95,6 @@ func _on_state_transitioned(next: StringName) -> void:
 	travel(next)
 
 
+## `ToolUse` becomes `&"tool_use"`.
 func _key(state: State) -> StringName:
 	return StringName(String(state.name).to_snake_case())

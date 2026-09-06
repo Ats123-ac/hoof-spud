@@ -1,5 +1,6 @@
-## Standing still. Leaves for "walk" on input, or for the active tool's state
-## when the use_tool action fires.
+## Standing still. Leaves for `walk` on input, or for the active tool's state when
+## `use_tool` fires.
+
 extends State
 
 var _player: Player

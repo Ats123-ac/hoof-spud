@@ -1,2 +1,2 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Normalize line endings; Godot text formats are LF.
+* text=auto eol=lf

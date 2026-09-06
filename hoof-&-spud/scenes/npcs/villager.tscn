@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/npcs/villager.gd" id="1_villager"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_machine"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_idle.gd" id="3_idle"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_wander.gd" id="4_wander"]
+[ext_resource type="Script" path="res://scripts/npcs/states/animal_graze.gd" id="5_graze"]
+[ext_resource type="Script" path="res://scripts/components/interactable_component.gd" id="6_interact"]
+[ext_resource type="Script" path="res://scripts/components/dialogue_component.gd" id="7_dialogue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(12, 7)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 14.0
+
+[node name="Villager" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_villager")
+wander_speed = 20.0
+wander_radius = 40.0
+pause_min = 2.5
+pause_max = 6.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+offset = Vector2(0, -8)
+
+[node name="Body" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Interact" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 2
+monitorable = false
+script = ExtResource("6_interact")
+prompt_text = "Talk"
+
+[node name="Shape" type="CollisionShape2D" parent="Interact"]
+shape = SubResource("CircleShape2D_interact")
+
+[node name="Dialogue" type="Node" parent="."]
+script = ExtResource("7_dialogue")
+speaker = "Marsh"
+lines = Array[String](["The eggplant came in early this year.", "Water something and it grows overnight. Forget it and it waits. That is the whole of farming, really."])
+first_meeting_lines = Array[String](["Oh! A new face on the farm.", "I am Marsh. The hen lays every morning, the cow only after she has been fed. Do not ask me why."])
+met_key = "marsh"
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_machine")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("3_idle")
+animation = &"idle_down"
+
+[node name="Wander" type="Node" parent="StateMachine"]
+script = ExtResource("4_wander")
+animation = &"walk_down"
+arrive_state = &"graze"
+
+[node name="Graze" type="Node" parent="StateMachine"]
+script = ExtResource("5_graze")
+animation = &"idle_down"
